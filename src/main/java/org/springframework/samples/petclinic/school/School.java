@@ -24,7 +24,7 @@ import java.util.List;
 @SQLRestriction("deleted_at IS NULL")
 public class School extends NamedEntity {
 
-// Inherits 'id' and 'name'
+	// Inherits 'id' and 'name'
 
 	@Column(name = "domain")
 	@NotEmpty
