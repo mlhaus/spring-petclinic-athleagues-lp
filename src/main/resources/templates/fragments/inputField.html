@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-
 <html xmlns:th="https://www.thymeleaf.org">
 <body>
-<th:block th:fragment="input (name, label, type)">
+<th:block th:fragment="input (label, name, type)">
 
-  <div class="mb-3"> <label th:for="${name}" class="form-label" th:text="${label}">Label</label>
+  <div class="mb-3">
+    <label th:for="${name}" class="form-label" th:text="${label}"></label>
 
-    <div class="position-relative"> <div th:switch="${type}">
-      <input th:case="'text'"
-             th:class="${#fields.hasErrors(name)} ? 'form-control is-invalid' : 'form-control'"
-             type="text" th:field="*{__${name}__}" />
+    <div class="position-relative">
+      <div th:switch="${type}">
 
-      <input th:case="'date'"
-             th:class="${#fields.hasErrors(name)} ? 'form-control is-invalid' : 'form-control'"
-             type="date" th:field="*{__${name}__}" />
-    </div>
+        <input th:case="'text'"
+               th:class="${#fields.hasErrors(name)} ? 'form-control is-invalid' : 'form-control'"
+               type="text" th:field="*{__${name}__}" />
+
+        <input th:case="'date'"
+               th:class="${#fields.hasErrors(name)} ? 'form-control is-invalid' : 'form-control'"
+               type="date" th:field="*{__${name}__}" />
+
+        <input th:case="'password'"
+               th:class="${#fields.hasErrors(name)} ? 'form-control is-invalid' : 'form-control'"
+               type="password" th:field="*{__${name}__}" />
+      </div>
 
       <span th:if="${#fields.hasErrors(name)}"
             class="fa fa-remove position-absolute text-danger"
@@ -22,7 +28,7 @@
             aria-hidden="true"></span>
 
       <div th:if="${#fields.hasErrors(name)}" class="invalid-feedback" style="display:block">
-        <span th:errors="*{__${name}__}">Error Message</span>
+        <span class="help-inline" th:errors="*{__${name}__}"></span>
       </div>
 
     </div>

@@ -34,9 +34,11 @@ public class SecurityConfig {
 				// This allows unmapped paths to result in 404, and allows all web viewing.
 				.requestMatchers(HttpMethod.GET).permitAll()
 
-				// API ENDPOINTS: Allow POST for user registration and login
-				.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+				// Allow POST for user registration and login
+				.requestMatchers("/register", "/login").permitAll()
+
+				// TEMPORARY: Allow anonymous users to POST to these forms
+				.requestMatchers(HttpMethod.POST, "/schools/new", "/owners/new").permitAll()
 
 				// PROTECTED CATCH-ALL (This protects unlisted POST/PUT/DELETE, etc.)
 				.anyRequest().authenticated()

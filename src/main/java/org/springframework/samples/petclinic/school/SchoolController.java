@@ -3,14 +3,15 @@ package org.springframework.samples.petclinic.school;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -62,5 +63,28 @@ class SchoolController {
 		schoolRepository.save(school);
 		// 3. Redirect to the list
 		return "redirect:/schools";
+	}
+
+	// Matches ONLY numbers (e.g., /schools/1)
+	@GetMapping("/schools/{schoolId:\\d+}")
+	public ModelAndView showSchoolById(@PathVariable("schoolId") int schoolId) {
+		ModelAndView mav = new ModelAndView("schools/schoolDetails");
+		School school = schoolRepository.findById(schoolId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
+		mav.addObject(school);
+		return mav;
+	}
+
+	// Matches text (e.g., /schools/kirkwood)
+	@GetMapping("/schools/{slug:[a-zA-Z-]+}")
+	public ModelAndView showSchoolBySlug(@PathVariable("slug") String slug) {
+		// Reconstruct the domain (User asked to assume ".edu")
+		String fullDomain = slug + ".edu";
+
+		ModelAndView mav = new ModelAndView("schools/schoolDetails");
+		School school = schoolRepository.findByDomain(fullDomain)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
+		mav.addObject(school);
+		return mav;
 	}
 }

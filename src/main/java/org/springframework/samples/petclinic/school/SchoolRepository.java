@@ -2,11 +2,19 @@ package org.springframework.samples.petclinic.school;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface SchoolRepository extends Repository<School, Integer> {
+	/**
+	 * Get a School by its domain.
+	 */
+	@Transactional(readOnly = true)
+	@Query("SELECT s FROM School s WHERE s.domain = :domain")
+	Optional<School> findByDomain(String domain);
 
 	/**
 	 * Retrieve all Schools from the data store.
@@ -29,5 +37,5 @@ public interface SchoolRepository extends Repository<School, Integer> {
 	 * Retrieve a School by its id.
 	 */
 	@Transactional(readOnly = true)
-	School findById(Integer id);
+	Optional<School> findById(Integer id);
 }

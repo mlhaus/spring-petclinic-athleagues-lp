@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.Set;
@@ -14,24 +15,28 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name="first_name", nullable = false, length = 50)
+	@Column(name="first_name", nullable = true, length = 50)
 	private String firstName;
 
-	@Column(name="last_name", nullable = false, length = 50)
+	@Column(name="last_name", nullable = true, length = 50)
 	private String lastName;
 
 	@Column(nullable = false, unique = true, length = 100)
+	@NotEmpty(message = "Email is required") // Stops empty strings
+	@Email(message = "Please enter a valid email") // Enforces email format
 	private String email;
 
 	@Column(name="password_hash", nullable = false, length = 255)
+	@NotEmpty(message = "Password is required")
+	@Size(min = 8, message = "Password must be at least 8 characters")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "Password must contain uppercase, lowercase, and number")
 	private String password;
 
-	// Many-to-Many Relationship with Role
-	@ManyToMany(fetch = FetchType.EAGER) // Fetch roles immediately when a user is loaded
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-		name = "user_roles", // Name of the junction table in MySQL
-		joinColumns = @JoinColumn(name = "user_id"), // Column in user_roles that references the 'users' table
-		inverseJoinColumns = @JoinColumn(name = "role_id") // Column in user_roles that references the 'roles' table
+		name = "user_roles",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	@EqualsAndHashCode.Exclude
 	private Set<Role> roles;

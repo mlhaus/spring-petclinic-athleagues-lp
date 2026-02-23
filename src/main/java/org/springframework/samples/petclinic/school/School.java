@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.validation.UniqueDomain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "schools")
+@UniqueDomain
 @Getter
 @Setter
 // Intercept the delete command and turn it into an update
