@@ -31,4 +31,5 @@ public class RecipeServiceImpl implements RecipeService {
 			.filter(recipe -> recipe.getType().equalsIgnoreCase(type))
 			.collect(Collectors.toList());
 	}
+
 }

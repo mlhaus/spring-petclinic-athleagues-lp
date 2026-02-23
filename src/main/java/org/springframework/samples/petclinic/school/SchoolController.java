@@ -87,4 +87,5 @@ class SchoolController {
 		mav.addObject(school);
 		return mav;
 	}
+
 }

@@ -28,25 +28,30 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf(csrf -> csrf.disable()) // Disable Cross-Site Request Forgery for API development
+		http.csrf(csrf -> csrf.disable()) // Disable Cross-Site Request Forgery for API
+											// development
 			.authorizeHttpRequests(authorize -> authorize
-				// This allows unmapped paths to result in 404, and allows all web viewing.
-				.requestMatchers(HttpMethod.GET).permitAll()
+				// This allows unmapped paths to result in 404, and allows all web
+				// viewing.
+				.requestMatchers(HttpMethod.GET)
+				.permitAll()
 
 				// Allow POST for user registration and login
-				.requestMatchers("/register", "/login").permitAll()
+				.requestMatchers("/register", "/login")
+				.permitAll()
 
 				// TEMPORARY: Allow anonymous users to POST to these forms
-				.requestMatchers(HttpMethod.POST, "/schools/new", "/owners/new").permitAll()
+				.requestMatchers(HttpMethod.POST, "/schools/new", "/owners/new")
+				.permitAll()
 
 				// PROTECTED CATCH-ALL (This protects unlisted POST/PUT/DELETE, etc.)
-				.anyRequest().authenticated()
-			)
+				.anyRequest()
+				.authenticated())
 			// Ensure all auto-challenge mechanisms are disabled
 			.httpBasic(AbstractHttpConfigurer::disable) // Disable the login popup
 			.formLogin(AbstractHttpConfigurer::disable); // Stop formLogin redirect
 
 		return http.build();
 	}
+
 }

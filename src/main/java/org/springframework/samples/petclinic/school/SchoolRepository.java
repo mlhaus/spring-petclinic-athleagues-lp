@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface SchoolRepository extends Repository<School, Integer> {
+
 	/**
 	 * Get a School by its domain.
 	 */
@@ -38,4 +39,5 @@ public interface SchoolRepository extends Repository<School, Integer> {
 	 */
 	@Transactional(readOnly = true)
 	Optional<School> findById(Integer id);
+
 }

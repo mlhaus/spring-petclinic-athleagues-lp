@@ -84,7 +84,6 @@ class MySqlIntegrationTests {
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
-
 	@Test
 	void testSchoolDetails() {
 		RestTemplate template = builder.rootUri("http://localhost:" + port).build();

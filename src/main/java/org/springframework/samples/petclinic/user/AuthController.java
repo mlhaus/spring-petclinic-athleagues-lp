@@ -22,10 +22,13 @@ import java.util.Optional;
 public class AuthController {
 
 	private final UserService userService;
+
 	private final SchoolRepository schoolRepository;
+
 	private final AuthenticationManager authenticationManager;
 
-	public AuthController(UserService userService, SchoolRepository schoolRepository, AuthenticationManager authenticationManager) {
+	public AuthController(UserService userService, SchoolRepository schoolRepository,
+			AuthenticationManager authenticationManager) {
 		this.userService = userService;
 		this.schoolRepository = schoolRepository;
 		this.authenticationManager = authenticationManager;
@@ -38,9 +41,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public String processRegisterForm(@Valid User user,
-									  BindingResult result,
-									  RedirectAttributes redirectAttributes) {
+	public String processRegisterForm(@Valid User user, BindingResult result, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "auth/registerForm";
 		}
@@ -50,7 +51,8 @@ public class AuthController {
 		// 1. Save the User (UserService handles password hashing)
 		try {
 			userService.registerNewUser(user);
-		} catch (RuntimeException ex) {
+		}
+		catch (RuntimeException ex) {
 			// Handle duplicate email or other service errors
 			result.rejectValue("email", "duplicate", "This email is already registered");
 			return "auth/registerForm";
@@ -58,10 +60,12 @@ public class AuthController {
 
 		// 2. LOGIN using the authenticationManager.
 		try {
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getEmail(), rawPassword);
+			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getEmail(),
+					rawPassword);
 			Authentication authentication = authenticationManager.authenticate(authToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			redirectAttributes.addFlashAttribute("messageDanger", "Account created, but auto-login failed.");
 			return "redirect:/login";
 		}
@@ -72,12 +76,14 @@ public class AuthController {
 		if (school.isPresent()) {
 			// 1. Set the Success Message
 			redirectAttributes.addFlashAttribute("messageSuccess",
-				"Your user account is created. You have been redirected to " + school.get().getName() + "'s school page.");
+					"Your user account is created. You have been redirected to " + school.get().getName()
+							+ "'s school page.");
 			return "redirect:/schools/" + school.get().getId();
-		} else {
+		}
+		else {
 			// 1b. Set a Generic Message (Warn them since they didn't match a school)
 			redirectAttributes.addFlashAttribute("messageWarning",
-				"Your user account is created, but we could not find a school matching your email domain.");
+					"Your user account is created, but we could not find a school matching your email domain.");
 			// Fallback if no school matches the email domain
 			return "redirect:/";
 		}
@@ -107,4 +113,5 @@ public class AuthController {
 
 		return Optional.empty();
 	}
+
 }

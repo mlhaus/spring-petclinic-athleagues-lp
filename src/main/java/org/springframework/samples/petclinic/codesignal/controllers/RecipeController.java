@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class RecipeController {
 
 	private final RecipeService recipeService;
+
 	private final RecipeRepository recipeRepository;
 
 	public RecipeController(RecipeService recipeService, RecipeRepository recipeRepository) {
@@ -26,8 +27,7 @@ public class RecipeController {
 
 	@GetMapping("/recipes/{recipeId}")
 	public Recipe getRecipe(@PathVariable("recipeId") Long id) {
-		return recipeRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
+		return recipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
 	}
 
 	@GetMapping("/recipes")
@@ -36,7 +36,8 @@ public class RecipeController {
 	}
 
 	@GetMapping("/category/{recipeCategory}")
-	public List<Recipe> getRecipesByCategoryAndDietaryPreference(@PathVariable String recipeCategory, @RequestParam Optional<String> dietaryPreference) {
+	public List<Recipe> getRecipesByCategoryAndDietaryPreference(@PathVariable String recipeCategory,
+			@RequestParam Optional<String> dietaryPreference) {
 		List<Recipe> recipes = recipeRepository.findByCategory(recipeCategory);
 
 		if (dietaryPreference.isPresent()) {
@@ -47,4 +48,5 @@ public class RecipeController {
 
 		return recipes;
 	}
+
 }

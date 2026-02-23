@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeRepository extends Repository<Recipe, Integer> {
+
 	Optional<Recipe> findById(Long recipeId);
 
 	List<Recipe> findByCategory(String recipeCategory);
 
 	List<Recipe> findAll();
+
 }

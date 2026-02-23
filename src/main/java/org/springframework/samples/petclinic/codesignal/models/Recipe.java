@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "recipes")
 public class Recipe {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -18,7 +19,9 @@ public class Recipe {
 	private String ingredients;
 
 	private String instructions;
+
 	private String type;
+
 	private String category;
 
 	// Spring/Hibernate automatically maps camelCase to snake_case (dietary_preference)
@@ -28,7 +31,8 @@ public class Recipe {
 	private String internalNotes;
 
 	// Hibernate needs a no-args constructor
-	public Recipe() {}
+	public Recipe() {
+	}
 
 	public Long getId() {
 		return id;
@@ -57,4 +61,5 @@ public class Recipe {
 	public String getInternalNotes() {
 		return internalNotes;
 	}
+
 }
